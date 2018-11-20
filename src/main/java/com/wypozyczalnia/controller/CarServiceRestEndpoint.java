@@ -37,6 +37,7 @@ public class CarServiceRestEndpoint {
     @RequestMapping(value = "/car/", method = RequestMethod.POST)
     public ResponseEntity<Void> createCar(@RequestBody Samochod car,    UriComponentsBuilder ucBuilder) {
         System.out.println("Creating Car " + car.getMarka());
+        System.out.println("Creating Car " + car.getId());
 
         carService.saveCar(car);
 
