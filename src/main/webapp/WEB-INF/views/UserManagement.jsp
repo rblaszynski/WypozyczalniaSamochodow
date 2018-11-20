@@ -14,14 +14,14 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="">Samochody<span class="sr-only">(current)</span></a>
-            </li>
             <li class="nav-item">
-                <a class="nav-link" href="UserManagement">Użytkownicy</a>
+                <a class="nav-link" href="CarManagement">Samochody</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="">Użytkownicy<span class="sr-only">(current)</span></a>
+
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="HireCar">Wypożyczenia</a>
@@ -29,6 +29,10 @@
         </ul>
     </div>
 </nav>
+
+<%--TODO: UserManagement to jest 1:1 CarManagement, więc możesz sie na nim nauczyć jak to działa. Zmieniasz ng-controller na UserController i tworzysz w folderach webapp/static/js odpowiednie pliki user_service i user_controller--%>
+<%--TODO: wszedzie gdzie jest ctrl.car -> ctrl.user--%>
+<%--TODO: tak samo te labelki Marka, itp - wiadomo o co chodzi--%>
 <div class="generic-container" ng-controller="CarController as ctrl">
     <div class="panel panel-default">
         <div class="panel-heading"><span class="lead">Car Form </span></div>
@@ -106,6 +110,7 @@
                 </tr>
                 </thead>
                 <tbody>
+                <%--TODO: user in ctrl.users--%>
                 <tr ng-repeat="car in ctrl.cars">
                     <td><span ng-bind="car.id"></span></td>
                     <td><span ng-bind="car.marka"></span></td>
@@ -128,7 +133,8 @@
 </div>
 
 <script src="<c:url value='/static/js/app.js' />"></script>
-<script src="<c:url value='/static/js/service/car_service.js' />"></script>
-<script src="<c:url value='/static/js/controller/car_controller.js' />"></script>
+<%--TODO: Tutaj uzupełniasz sciezki do serwisu i kontrolera--%>
+<%--<script src="<c:url value='/static/js/service/' />"></script>--%>
+<%--<script src="<c:url value='/static/js/controller/' />"></script>--%>
 </body>
 </html>
