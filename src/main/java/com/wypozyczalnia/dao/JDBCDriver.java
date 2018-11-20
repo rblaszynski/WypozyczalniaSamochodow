@@ -31,7 +31,7 @@ public class JDBCDriver {
     }
 
     public List<Samochod> selectAll() {
-        String query = "SELECT IdSamochodu, Marka, Model, Kolor, YEAR(STR_TO_DATE(RokProdukcji, \"%Y\")) as RokProdukcji, PojemnoscBaku, IdKlasy FROM Samochod";
+        String query = "SELECT IdSamochodu, Marka, Model, Kolor, YEAR(STR_TO_DATE(RokProdukcji, \"%Y\")) as RokProdukcji, PojemnoscBaku, IdKlasy FROM samochody";
         List<Samochod> cars = new ArrayList<Samochod>();
         try (
                 Statement stmt = connection.createStatement();
@@ -60,7 +60,7 @@ public class JDBCDriver {
     }
 
     public void insertCar(Samochod car) {
-        String OQuery = "insert into samochod(Marka,Model,Kolor,RokProdukcji,PojemnoscBaku,IdKlasy) " +
+        String OQuery = "insert into samochody(Marka,Model,Kolor,RokProdukcji,PojemnoscBaku,IdKlasy) " +
                 "values ('" + car.getMarka() + "','" +
                 car.getModel() + "','" +
                 car.getKolor() + "','" +
@@ -77,7 +77,7 @@ public class JDBCDriver {
 
     public void deleteCar(String id) {
         String OQuery;
-        OQuery = "delete from Samochod where IdSamochodu=" + id;
+        OQuery = "delete from samochody where IdSamochodu=" + id;
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
@@ -87,14 +87,14 @@ public class JDBCDriver {
     }
 
     public void updateCar(Samochod car) {
-        String OQuery = "update samochod set " +
+        String OQuery = "update samochody set " +
                 "Marka = '" + car.getMarka() + "' , " +
                 "Model = '" + car.getModel() + "' , " +
                 "Kolor = '" + car.getKolor() + "' , " +
                 "RokProdukcji = '" + car.getRokProdukcji() + "', " +
                 "PojemnoscBaku = '" + car.getPojemnoscBaku() + "', " +
                 "IdKlasy = '" + car.getIdKlasy() + "'" +
-                " where samochod.IdSamochodu = '" + car.getId() + "'";
+                " where samochody.IdSamochodu = '" + car.getId() + "'";
 
         try {
             Statement statement = connection.createStatement();
