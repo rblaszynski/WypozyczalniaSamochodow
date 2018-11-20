@@ -15,9 +15,9 @@ public class JDBCDriver {
     public JDBCDriver() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/wypozyczalnia?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-            String username = "Robert";
-            String password = "password";
+            String url = "jdbc:mysql://localhost:3306/Wypozyczalnia_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+            String username = "root";
+            String password = "B8a4c7a6d3a8!";
 
             System.out.println("Connecting database...");
 
