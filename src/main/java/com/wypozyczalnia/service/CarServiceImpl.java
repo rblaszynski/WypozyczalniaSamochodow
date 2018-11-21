@@ -16,7 +16,7 @@ public class CarServiceImpl implements CarService {
 	private static List<Samochod> cars = new ArrayList<>();
 
 	public List<Samochod> findAllCars() {
-		cars = jdbcDriver.selectAll();
+		cars = jdbcDriver.selectAllCars();
 		return cars;
 	}
 

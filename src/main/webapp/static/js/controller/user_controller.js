@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp').controller('UserController', ['$scope', 'UserService', function ($scope, UserServiceService) {
+angular.module('myApp').controller('UserController', ['$scope', 'UserService', function ($scope, UserService) {
     var $ctrl = this;
     $ctrl.users = [];
     $ctrl.user = {};
@@ -10,8 +10,10 @@ angular.module('myApp').controller('UserController', ['$scope', 'UserService', f
     $ctrl.remove = remove;
     $ctrl.reset = reset;
 
+    $ctrl.$onInit = function() {
+        fetchAllUsers();
+    };
 
-    fetchAllUsers();
 
     function fetchAllUsers() {
         UserService.fetchAllUsers()
