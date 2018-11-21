@@ -13,11 +13,8 @@ public class CarServiceImpl implements CarService {
 
 	private static JDBCDriver jdbcDriver = new JDBCDriver();
 
-	private static List<Samochod> cars = new ArrayList<>();
-
-	public List<Samochod> findAllCars() {
-		cars = jdbcDriver.selectAll();
-		return cars;
+    public List<Samochod> findAllCars() {
+		return jdbcDriver.selectAll();
 	}
 
 	public void saveCar(Samochod car) {

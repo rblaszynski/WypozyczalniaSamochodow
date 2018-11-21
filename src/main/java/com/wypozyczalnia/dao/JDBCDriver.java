@@ -31,7 +31,7 @@ public class JDBCDriver {
     }
 
     public List<Samochod> selectAll() {
-        String query = "SELECT IdSamochodu, Marka, Model, Kolor, YEAR(STR_TO_DATE(RokProdukcji, \"%Y\")) as RokProdukcji, PojemnoscBaku, IdKlasy FROM samochody";
+        String query = "SELECT IdSamochodu, Marka, Model, Kolor, YEAR(STR_TO_DATE(RokProdukcji, \"%Y\")) as RokProdukcji, PojemnoscBaku, IdKlasy, Silnik, CenaWypozyczenia, AktualnyPrzebieg FROM samochody";
         List<Samochod> cars = new ArrayList<Samochod>();
         try (
                 Statement stmt = connection.createStatement();
@@ -47,8 +47,11 @@ public class JDBCDriver {
                     samochod.setModel(rs.getString("Model"));
                     samochod.setKolor(rs.getString("Kolor"));
                     samochod.setRokProdukcji(rs.getString("RokProdukcji"));
-                    samochod.setPojemnoscBaku(rs.getString("PojemnoscBaku"));
+                    samochod.setPojemnoscBaku(Double.valueOf(rs.getString("PojemnoscBaku")));
                     samochod.setIdKlasy(rs.getString("IdKlasy"));
+                    samochod.setSilnik(Float.valueOf(rs.getString("Silnik")));
+                    samochod.setCenaWypozyczenia(Double.valueOf(rs.getString("CenaWypozyczenia")));
+                    samochod.setAktualnyPrzebieg(Integer.valueOf(rs.getString("AktualnyPrzebieg")));
                     cars.add(samochod);
                 }
                 return cars;
@@ -60,13 +63,16 @@ public class JDBCDriver {
     }
 
     public void insertCar(Samochod car) {
-        String OQuery = "insert into samochody(Marka,Model,Kolor,RokProdukcji,PojemnoscBaku,IdKlasy) " +
+        String OQuery = "insert into samochody(Marka,Model,Kolor,RokProdukcji,PojemnoscBaku,IdKlasy,Silnik,CenaWypozyczenia,AktualnyPrzebieg) " +
                 "values ('" + car.getMarka() + "','" +
                 car.getModel() + "','" +
                 car.getKolor() + "','" +
                 car.getRokProdukcji() + "','" +
                 car.getPojemnoscBaku() + "','" +
-                car.getIdKlasy() + "')";
+                car.getIdKlasy() + "','" +
+                car.getSilnik() + "','" +
+                car.getCenaWypozyczenia() + "','" +
+                car.getAktualnyPrzebieg() + "')";
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
@@ -93,7 +99,10 @@ public class JDBCDriver {
                 "Kolor = '" + car.getKolor() + "' , " +
                 "RokProdukcji = '" + car.getRokProdukcji() + "', " +
                 "PojemnoscBaku = '" + car.getPojemnoscBaku() + "', " +
-                "IdKlasy = '" + car.getIdKlasy() + "'" +
+                "IdKlasy = '" + car.getIdKlasy() + "', " +
+                "Silnik = '" + car.getSilnik() + "', " +
+                "CenaWypozyczenia = '" + car.getCenaWypozyczenia() + "', " +
+                "AktualnyPrzebieg = '" + car.getAktualnyPrzebieg() + "'" +
                 " where samochody.IdSamochodu = '" + car.getId() + "'";
 
         try {

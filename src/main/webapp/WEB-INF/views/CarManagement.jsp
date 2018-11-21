@@ -40,13 +40,13 @@
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Marka</label>
                         <input type="text" ng-model="ctrl.car.marka"
-                               class="form-control input-sm" placeholder="Enter car producer" required
+                               class="form-control input-sm" placeholder="Wpisz car producer" required
                         />
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Model</label>
                         <input type="text" ng-model="ctrl.car.model" class="form-control input-sm"
-                               placeholder="Enter car model" required/>
+                               placeholder="Wpisz car model" required/>
                     </div>
                 </div>
 
@@ -54,12 +54,12 @@
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Kolor</label>
                         <input type="text" ng-model="ctrl.car.kolor" class="form-control input-sm"
-                               placeholder="Enter car colour" required/>
+                               placeholder="Wpisz car colour" required/>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Rok Produkcji</label>
                         <input type="text" ng-model="ctrl.car.rokProdukcji" class="form-control input-sm"
-                               placeholder="Enter production date" required/>
+                               placeholder="Wpisz production date" required/>
                     </div>
                 </div>
 
@@ -67,12 +67,33 @@
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Pojemnosc Baku</label>
                         <input type="text" ng-model="ctrl.car.pojemnoscBaku" class="form-control input-sm"
-                               placeholder="Enter pojBaku" required/>
+                               placeholder="Wpisz pojBaku" required/>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Id Klasy</label>
                         <input type="text" ng-model="ctrl.car.idKlasy" class="form-control input-sm"
-                               placeholder="Enter idKlasy" required/>
+                               placeholder="Wpisz idKlasy" required/>
+                    </div>
+                </div>
+
+                <div class="row col-md-8">
+                    <div class="col-md-4 mb-3">
+                        <label class="control-label">Pojemnosc silnika</label>
+                        <input type="text" ng-model="ctrl.car.silnik" class="form-control input-sm"
+                               placeholder="Wpisz poj silnika" required/>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="control-label">Cena wypozyczenia</label>
+                        <input type="text" ng-model="ctrl.car.cenaWypozyczenia" class="form-control input-sm"
+                               placeholder="Wpisz cene wyp" required/>
+                    </div>
+                </div>
+
+                <div class="row col-md-8">
+                    <div class="col-md-4 mb-3">
+                        <label class="control-label">Aktualny przebieg</label>
+                        <input type="text" ng-model="ctrl.car.aktualnyPrzebieg" class="form-control input-sm"
+                               placeholder="Wpisz aktualny przebieg" required/>
                     </div>
                 </div>
 
@@ -102,6 +123,9 @@
                     <th>Rok Produkcji</th>
                     <th>Pojemnosc Baku</th>
                     <th>Id Klasy</th>
+                    <th>Silnik</th>
+                    <th>Cena wypożyczenia</th>
+                    <th>Aktualny przebieg</th>
                     <th width="14%"></th>
                 </tr>
                 </thead>
@@ -114,6 +138,9 @@
                     <td><span ng-bind="car.rokProdukcji"></span></td>
                     <td><span ng-bind="car.pojemnoscBaku"></span></td>
                     <td><span ng-bind="car.idKlasy"></span></td>
+                    <td><span ng-bind="car.silnik"></span></td>
+                    <td><span ng-bind="car.cenaWypozyczenia"></span></td>
+                    <td><span ng-bind="car.aktualnyPrzebieg"></span></td>
                     <td>
                         <button type="button" ng-click="ctrl.edit(car.id)" class="btn btn-success custom-width">Edit
                         </button>

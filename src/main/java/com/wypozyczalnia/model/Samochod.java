@@ -6,13 +6,16 @@ public class Samochod {
     private String model;
     private String kolor;
     private String rokProdukcji;
-    private String pojemnoscBaku;
+    private double pojemnoscBaku;
     private String idKlasy;
+    private float silnik;
+    private double cenaWypozyczenia;
+    private int aktualnyPrzebieg;
 
     public Samochod() {
     }
 
-    public Samochod(long id, String marka, String model, String kolor, String rokProdukcji, String pojemnoscBaku, String idKlasy) {
+    public Samochod(long id, String marka, String model, String kolor, String rokProdukcji, double pojemnoscBaku, String idKlasy, float silnik, double cenaWypozyczenia, int aktualnyPrzebieg) {
         this.id = id;
         this.marka = marka;
         this.model = model;
@@ -20,6 +23,9 @@ public class Samochod {
         this.rokProdukcji = rokProdukcji;
         this.pojemnoscBaku = pojemnoscBaku;
         this.idKlasy = idKlasy;
+        this.silnik = silnik;
+        this.cenaWypozyczenia = cenaWypozyczenia;
+        this.aktualnyPrzebieg = aktualnyPrzebieg;
     }
 
     public long getId() {
@@ -62,11 +68,11 @@ public class Samochod {
         this.rokProdukcji = rokProdukcji;
     }
 
-    public String getPojemnoscBaku() {
+    public double getPojemnoscBaku() {
         return pojemnoscBaku;
     }
 
-    public void setPojemnoscBaku(String pojemnoscBaku) {
+    public void setPojemnoscBaku(double pojemnoscBaku) {
         this.pojemnoscBaku = pojemnoscBaku;
     }
 
@@ -76,5 +82,29 @@ public class Samochod {
 
     public void setIdKlasy(String idKlasy) {
         this.idKlasy = idKlasy;
+    }
+
+    public float getSilnik() {
+        return silnik;
+    }
+
+    public void setSilnik(float silnik) {
+        this.silnik = silnik;
+    }
+
+    public double getCenaWypozyczenia() {
+        return cenaWypozyczenia;
+    }
+
+    public void setCenaWypozyczenia(double cenaWypozyczenia) {
+        this.cenaWypozyczenia = cenaWypozyczenia;
+    }
+
+    public int getAktualnyPrzebieg() {
+        return aktualnyPrzebieg;
+    }
+
+    public void setAktualnyPrzebieg(int aktualnyPrzebieg) {
+        this.aktualnyPrzebieg = aktualnyPrzebieg;
     }
 }
