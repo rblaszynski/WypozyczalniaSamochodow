@@ -14,7 +14,7 @@ public class CarServiceImpl implements CarService {
 	private static JDBCDriver jdbcDriver = new JDBCDriver();
 
     public List<Samochod> findAllCars() {
-		return jdbcDriver.selectAll();
+		return jdbcDriver.selectAllCars();
 	}
 
 	public void saveCar(Samochod car) {
