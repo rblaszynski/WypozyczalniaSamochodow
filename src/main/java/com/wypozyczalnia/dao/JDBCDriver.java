@@ -1,6 +1,7 @@
 package com.wypozyczalnia.dao;
 
 import com.wypozyczalnia.model.Samochod;
+import com.wypozyczalnia.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class JDBCDriver {
         }
     }
 
-    public List<Samochod> selectAll() {
-        String query = "SELECT IdSamochodu, Marka, Model, Kolor, YEAR(STR_TO_DATE(RokProdukcji, \"%Y\")) as RokProdukcji, PojemnoscBaku, IdKlasy, Silnik, CenaWypozyczenia, AktualnyPrzebieg FROM samochody";
+    public List<Samochod> selectAllCars() {
+        String query = "SELECT IdSamochodu, Marka, Model, Kolor, YEAR(STR_TO_DATE(RokProdukcji, \"%Y\")) as RokProdukcji, PojemnoscBaku, IdKlasy FROM samochody";
         List<Samochod> cars = new ArrayList<Samochod>();
         try (
                 Statement stmt = connection.createStatement();
@@ -113,6 +114,77 @@ public class JDBCDriver {
         }
     }
 
+    //Methods for User
+    public List<User> selectAllUsers() {
+        String query = "SELECT IdOsoby, Imie, Nazwisko, DataUrodzenia, IdAdres, NrTelefonu FROM osoba";
+        List<User> users = new ArrayList<User>();
+        try (
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            if (!rs.isBeforeFirst()) {
+                found = false;
+            } else {
+                found = true;
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(Long.valueOf(rs.getString("IdOsoby")));
+                    user.setImie(rs.getString("Imie"));
+                    user.setNazwisko(rs.getString("Nazwisko"));
+                    user.setDataUrodzenia(rs.getString("DataUrodzenia"));
+                    user.setIdAdres(rs.getString("IdAdres"));
+                    user.setNrTelefonu(rs.getString("NrTelefonu"));
+                    users.add(user);
+                }
+                return users;
+            }
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+        }
+        return null;
+    }
+
+    public void insertUser(User user) {
+        String OQuery = "insert into osoba(Imie, Nazwisko, DataUrodzenia, IdAdres, NrTelefonu) " +
+                "values ('" + user.getImie() + "','" +
+                user.getNazwisko() + "','" +
+                user.getDataUrodzenia() + "','" +
+                user.getIdAdres() + "','" +
+                user.getNrTelefonu() + "')";
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(OQuery);
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+        }
+    }
+
+    public void deleteUser(String id) {
+        String OQuery;
+        OQuery = "delete from osoba where IdOsoby=" + id;
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(OQuery);
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+        }
+    }
+
+    public void updateUser(User user) {
+        String OQuery = "update osoba set " +
+                "Imie = '" + user.getImie() + "' , " +
+                "Nazwisko = '" + user.getNazwisko() + "' , " +
+                "DataUrodzenia = '" + user.getDataUrodzenia() + "' , " +
+                "IdAdres = '" + user.getIdAdres() + "', " +
+                "NrTelefonu = '" + user.getNrTelefonu() + "'" +
+                " where osoba.IdOsoby = '" + user.getId() + "'";
+
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(OQuery);
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+        }
+    }
     public Connection getConnection() {
         return connection;
     }
