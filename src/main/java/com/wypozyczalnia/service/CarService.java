@@ -7,12 +7,12 @@ import com.wypozyczalnia.model.Samochod;
 
 public interface CarService {
 
-    List<Samochod> findAllCars();
+    String findAllCars();
 
-    void saveCar(Samochod user);
+    String saveCar(Samochod user);
 
-    void deleteCar(String id);
+    String deleteCar(String id);
 
-    void updateCar(Samochod car);
+    String updateCar(Samochod car);
 
 }

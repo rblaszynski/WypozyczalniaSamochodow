@@ -1,5 +1,7 @@
 package com.wypozyczalnia.controller;
  
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import com.wypozyczalnia.model.Samochod;
@@ -20,45 +22,56 @@ public class CarServiceRestEndpoint {
  
     @Autowired
     CarService carService;
+
+    public static List<Samochod> cars;
     
     //-------------------Retrieve All Cars--------------------------------------------------------
      
-    @RequestMapping(value = "/car/", method = RequestMethod.GET)
-    public ResponseEntity<List<Samochod>> listAllCars() {
-        List<Samochod> cars = carService.findAllCars();
-        if(cars.isEmpty()){
+    @RequestMapping(value = "/car/", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity listAllCars() {
+        String db = carService.findAllCars();
+        if(db.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
         }
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        if(db.equals("true")){
+            return new ResponseEntity<>(cars, HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(db,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
    //-------------------Create a Car--------------------------------------------------------
 
-    @RequestMapping(value = "/car/", method = RequestMethod.POST)
-    public ResponseEntity<Void> createCar(@RequestBody Samochod car,    UriComponentsBuilder ucBuilder) {
+    @RequestMapping(value = "/car/", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity createCar(@RequestBody Samochod car,    UriComponentsBuilder ucBuilder) {
         System.out.println("Creating Car " + car.getMarka());
 
-        carService.saveCar(car);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(car.getId()).toUri());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        String status = carService.saveCar(car);
+        if(status.equals("true")){
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        else return new ResponseEntity<>("{\"error\":\""+status+"\"}",HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     //------------------- Update a Car --------------------------------------------------------
 
-    @RequestMapping(value = "/car/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Samochod> updateUser(@PathVariable("id") long id, @RequestBody Samochod car) {
+    @RequestMapping(value = "/car/{id}", method = RequestMethod.PUT, produces = "application/json")
+    public ResponseEntity updateUser(@PathVariable("id") long id, @RequestBody Samochod car) {
         System.out.println("Updating Car " + id);
-        carService.updateCar(car);
-        return new ResponseEntity<>(car, HttpStatus.OK);
+        String status = carService.updateCar(car);
+        if(status.equals("true")){
+            return new ResponseEntity<>(car, HttpStatus.OK);
+        }
+        else return new ResponseEntity<String>("{\"error\":\""+status+"\"}",HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
    //------------------- Delete a Car --------------------------------------------------------
 
-    @RequestMapping(value = "/car/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Samochod> deleteCar(@PathVariable("id") long id) {
-        carService.deleteCar(String.valueOf(id));
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @RequestMapping(value = "/car/{id}", method = RequestMethod.DELETE, produces = "application/json")
+    public ResponseEntity deleteCar(@PathVariable("id") long id) {
+       String status = carService.deleteCar(String.valueOf(id));
+        if(status.equals("true")){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        else return new ResponseEntity<>(status,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -5,7 +5,7 @@ public class Samochod {
     private String marka;
     private String model;
     private String kolor;
-    private String rokProdukcji;
+    private int rokProdukcji;
     private double pojemnoscBaku;
     private String idKlasy;
     private float silnik;
@@ -15,7 +15,7 @@ public class Samochod {
     public Samochod() {
     }
 
-    public Samochod(long id, String marka, String model, String kolor, String rokProdukcji, double pojemnoscBaku, String idKlasy, float silnik, double cenaWypozyczenia, int aktualnyPrzebieg) {
+    public Samochod(long id, String marka, String model, String kolor, int rokProdukcji, double pojemnoscBaku, String idKlasy, float silnik, double cenaWypozyczenia, int aktualnyPrzebieg) {
         this.id = id;
         this.marka = marka;
         this.model = model;
@@ -60,11 +60,11 @@ public class Samochod {
         this.kolor = kolor;
     }
 
-    public String getRokProdukcji() {
+    public int getRokProdukcji() {
         return rokProdukcji;
     }
 
-    public void setRokProdukcji(String rokProdukcji) {
+    public void setRokProdukcji(int rokProdukcji) {
         this.rokProdukcji = rokProdukcji;
     }
 

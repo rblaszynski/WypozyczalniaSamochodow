@@ -13,18 +13,18 @@ public class CarServiceImpl implements CarService {
 
 	private static JDBCDriver jdbcDriver = new JDBCDriver();
 
-    public List<Samochod> findAllCars() {
+    public String findAllCars() {
 		return jdbcDriver.selectAllCars();
 	}
 
-	public void saveCar(Samochod car) {
-		jdbcDriver.insertCar(car);
+	public String saveCar(Samochod car) {
+		 return jdbcDriver.insertCar(car);
 	}
 
-	public void deleteCar(String id){
-	    jdbcDriver.deleteCar(id);
+	public String deleteCar(String id){
+	    return jdbcDriver.deleteCar(id);
     }
 
-    public void updateCar(Samochod car) {jdbcDriver.updateCar(car); }
+    public String updateCar(Samochod car) { return jdbcDriver.updateCar(car); }
 
 }

@@ -20,7 +20,7 @@
                 <a class="nav-link" href="CarManagement">Samochody</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="UserManagement">Użytkownicy<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="UserManagement">Klienci<span class="sr-only">(current)</span></a>
 
             </li>
             <li class="nav-item">

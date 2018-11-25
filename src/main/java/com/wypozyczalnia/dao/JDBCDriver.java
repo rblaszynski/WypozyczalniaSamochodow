@@ -2,6 +2,10 @@ package com.wypozyczalnia.dao;
 
 import com.wypozyczalnia.model.Samochod;
 import com.wypozyczalnia.model.User;
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+import com.wypozyczalnia.model.Wypozyczenie;
+
+import static com.wypozyczalnia.controller.CarServiceRestEndpoint.cars;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,14 +19,22 @@ public class JDBCDriver {
 
     public JDBCDriver() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/Wypozyczalnia_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-            String username = "root";
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String connectionUrl =
+                    "jdbc:sqlserver://localhost\\DESKTOP-KRGL5CF:1433;"
+                            + "database=wypozyczalnia;"
+                            + "user=user;"
+                            + "password=1234;";
+
+
+
+            String url = "jdbc:sqlserver://localhost\\DESKTOP-KRGL5CF:1433;database=wypozyczalnia";
+            String username = "Robert";
             String password = "password";
 
             System.out.println("Connecting database...");
 
-            connection = DriverManager.getConnection(url, username, password);
+            connection = DriverManager.getConnection(connectionUrl);
             System.out.println("Database connected!");
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the database!", e);
@@ -31,9 +43,9 @@ public class JDBCDriver {
         }
     }
 
-    public List<Samochod> selectAllCars() {
-        String query = "SELECT IdSamochodu, Marka, Model, Kolor, YEAR(STR_TO_DATE(RokProdukcji, \"%Y\")) as RokProdukcji, PojemnoscBaku, IdKlasy FROM samochody";
-        List<Samochod> cars = new ArrayList<Samochod>();
+    public String selectAllCars() {
+        String query = "SELECT IdSamochodu, Marka, Model, Kolor, RokProdukcji, PojemnoscBaku, IdKlasy, Silnik, CenaWypozyczenia, AktualnyPrzebieg FROM samochody";
+        List<Samochod> carList = new ArrayList<Samochod>();
         try (
                 Statement stmt = connection.createStatement();
                 ResultSet rs = stmt.executeQuery(query)) {
@@ -47,24 +59,25 @@ public class JDBCDriver {
                     samochod.setMarka(rs.getString("Marka"));
                     samochod.setModel(rs.getString("Model"));
                     samochod.setKolor(rs.getString("Kolor"));
-                    samochod.setRokProdukcji(rs.getString("RokProdukcji"));
+                    samochod.setRokProdukcji(Integer.valueOf(rs.getString("RokProdukcji")));
                     samochod.setPojemnoscBaku(Double.valueOf(rs.getString("PojemnoscBaku")));
                     samochod.setIdKlasy(rs.getString("IdKlasy"));
                     samochod.setSilnik(Float.valueOf(rs.getString("Silnik")));
                     samochod.setCenaWypozyczenia(Double.valueOf(rs.getString("CenaWypozyczenia")));
                     samochod.setAktualnyPrzebieg(Integer.valueOf(rs.getString("AktualnyPrzebieg")));
-                    cars.add(samochod);
+                    carList.add(samochod);
                 }
-                return cars;
+                cars = carList;
             }
         } catch (SQLException s) {
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+            return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
         }
-        return null;
+        return "true";
     }
 
-    public void insertCar(Samochod car) {
-        String OQuery = "insert into samochody(Marka,Model,Kolor,RokProdukcji,PojemnoscBaku,IdKlasy,Silnik,CenaWypozyczenia,AktualnyPrzebieg) " +
+    public String insertCar(Samochod car) {
+        String OQuery = "insert into Samochody(Marka,Model,Kolor,RokProdukcji,PojemnoscBaku,IdKlasy,Silnik,CenaWypozyczenia,AktualnyPrzebieg) " +
                 "values ('" + car.getMarka() + "','" +
                 car.getModel() + "','" +
                 car.getKolor() + "','" +
@@ -79,10 +92,12 @@ public class JDBCDriver {
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+            return ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
+        return "true";
     }
 
-    public void deleteCar(String id) {
+    public String deleteCar(String id) {
         String OQuery;
         OQuery = "delete from samochody where IdSamochodu=" + id;
         try {
@@ -90,11 +105,13 @@ public class JDBCDriver {
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+            return  ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
+        return "true";
     }
 
-    public void updateCar(Samochod car) {
-        String OQuery = "update samochody set " +
+    public String updateCar(Samochod car) {
+        String OQuery = "update Samochody set " +
                 "Marka = '" + car.getMarka() + "' , " +
                 "Model = '" + car.getModel() + "' , " +
                 "Kolor = '" + car.getKolor() + "' , " +
@@ -104,14 +121,15 @@ public class JDBCDriver {
                 "Silnik = '" + car.getSilnik() + "', " +
                 "CenaWypozyczenia = '" + car.getCenaWypozyczenia() + "', " +
                 "AktualnyPrzebieg = '" + car.getAktualnyPrzebieg() + "'" +
-                " where samochody.IdSamochodu = '" + car.getId() + "'";
+                " where Samochody.IdSamochodu = '" + car.getId() + "'";
 
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
-            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+            return ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
+        return "true";
     }
 
     //Methods for User
@@ -185,6 +203,58 @@ public class JDBCDriver {
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
     }
+
+    public Samochod getCarById(String id) {
+        String query = "SELECT IdSamochodu, Marka, Model, Kolor, RokProdukcji, PojemnoscBaku, IdKlasy, Silnik, CenaWypozyczenia, AktualnyPrzebieg FROM samochody where IdSamochodu = "+id;
+        try (
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            if (!rs.isBeforeFirst()) {
+                found = false;
+            } else {
+                found = true;
+                while (rs.next()) {
+                    Samochod samochod = new Samochod();
+                    samochod.setId(Long.valueOf(rs.getString("IdSamochodu")));
+                    samochod.setMarka(rs.getString("Marka"));
+                    samochod.setModel(rs.getString("Model"));
+                    samochod.setKolor(rs.getString("Kolor"));
+                    samochod.setRokProdukcji(Integer.valueOf(rs.getString("RokProdukcji")));
+                    samochod.setPojemnoscBaku(Double.valueOf(rs.getString("PojemnoscBaku")));
+                    samochod.setIdKlasy(rs.getString("IdKlasy"));
+                    samochod.setSilnik(Float.valueOf(rs.getString("Silnik")));
+                    samochod.setCenaWypozyczenia(Double.valueOf(rs.getString("CenaWypozyczenia")));
+                    samochod.setAktualnyPrzebieg(Integer.valueOf(rs.getString("AktualnyPrzebieg")));
+                    return samochod;
+                }
+            }
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+        }
+        return null;
+    }
+
+    public String insertWypozyczenie(Wypozyczenie wypozyczenie){
+        System.out.println(wypozyczenie);
+        String OQuery = "insert into Wypozyczenia(IdKlienta, IdSamochodu, IdRodzaj, IdPracownika, DataWypozyczenia, DataZwrotu, Koszt, LimitKilometrow) " +
+                "values ('" + wypozyczenie.getIdKlienta() + "','" +
+                wypozyczenie.getIdSamochodu() + "','" +
+                wypozyczenie.getIdrodzaj() + "','" +
+                wypozyczenie.getIdPracownika() + "','" +
+                wypozyczenie.getDataWypozyczenia() + "','" +
+                wypozyczenie.getDataZwrotu() + "','" +
+                wypozyczenie.getKoszt() + "','" +
+                wypozyczenie.getLimitKilometrow() + "')";
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(OQuery);
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+            return ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+        }
+        return "true";
+    }
+
     public Connection getConnection() {
         return connection;
     }

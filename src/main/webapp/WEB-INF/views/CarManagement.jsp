@@ -6,12 +6,18 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.min.js"></script>
+    <style>
+        .input-error {
+            color: red;
+        }
+    </style>
     <link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
 </head>
 <body ng-app="myApp" class="ng-cloak">
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="index">HOME</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -29,71 +35,110 @@
         </ul>
     </div>
 </nav>
+
 <div class="generic-container" ng-controller="CarController as ctrl">
     <div class="panel panel-default">
         <div class="panel-heading"><span class="lead">Car Form </span></div>
         <div class="formcontainer">
-            <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
-                <input type="hidden" ng-model="ctrl.car.id"/>
+            <div>
+    <span style="color: red; font-size: large;">
+        {{ctrl.error}}
+    </span>
+            </div>
+            <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal" novalidate>
 
                 <div class="row col-md-8">
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Marka</label>
-                        <input type="text" ng-model="ctrl.car.marka"
-                               class="form-control input-sm" placeholder="Wpisz car producer" required
+                        <input type="text" ng-model="ctrl.car.marka" name="marka"
+                               class="form-control input-sm" placeholder="Wpisz markę samochodu" ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" ng-minlength="3"
                         />
+                        <p class="input-error" ng-show="myForm.marka.$error.minlength" class="help-block">Minimalna długość marki wynosi 3.</p>
+
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Model</label>
-                        <input type="text" ng-model="ctrl.car.model" class="form-control input-sm"
-                               placeholder="Wpisz car model" required/>
+                        <input type="text" ng-model="ctrl.car.model" name="model"
+                               class="form-control input-sm" placeholder="Wpisz model samochodu" ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" ng-minlength="3"
+                        />
+                        <p class="input-error" ng-show="myForm.model.$error.minlength" class="help-block">Minimalna długość modelu wynosi 3.</p>
                     </div>
                 </div>
 
                 <div class="row col-md-8">
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Kolor</label>
-                        <input type="text" ng-model="ctrl.car.kolor" class="form-control input-sm"
-                               placeholder="Wpisz car colour" required/>
+                        <input type="text" ng-model="ctrl.car.kolor" name="kolor"
+                               class="form-control input-sm" placeholder="Wpisz kolor" ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" ng-minlength="3"
+                        />
+                        <p class="input-error" ng-show="myForm.kolor.$error.minlength" class="help-block">Minimalna długość koloru wynosi 3.</p>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Rok Produkcji</label>
-                        <input type="text" ng-model="ctrl.car.rokProdukcji" class="form-control input-sm"
-                               placeholder="Wpisz production date" required/>
+                        <input type="number" ng-model="ctrl.car.rokProdukcji" name="rokProdukcji"
+                               class="form-control input-sm" placeholder="Wpisz rok produkcij" ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" min="1900" max="{{currentYear}}"
+                        />
+                        <p class="input-error" ng-show="myForm.rokProdukcji.$error.min" class="help-block">W tym roku nie istniały jeszcze samochody!</p>
+                        <p class="input-error" ng-show="myForm.rokProdukcji.$error.max">Nie można dodać samochodu pochodzącego z przyszłości!</p>
+
                     </div>
                 </div>
 
                 <div class="row col-md-8">
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Pojemnosc Baku</label>
-                        <input type="text" ng-model="ctrl.car.pojemnoscBaku" class="form-control input-sm"
-                               placeholder="Wpisz pojBaku" required/>
+                        <input type="number" ng-model="ctrl.car.pojemnoscBaku" name="pojemnoscBaku"
+                               class="form-control input-sm" placeholder="Wpisz pojemność baku" ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" ng-pattern="/^\d{0,9}(\.\d{1,9})?$/"
+                        />
+                        <p class="input-error" ng-show="myForm.pojemnoscBaku.$error.pattern" class="help-block">Wpisz
+                            prawidłową wartość pojemności baku.</p>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Id Klasy</label>
-                        <input type="text" ng-model="ctrl.car.idKlasy" class="form-control input-sm"
-                               placeholder="Wpisz idKlasy" required/>
+                        <input type="text" ng-model="ctrl.car.idKlasy" name="idKlasy"
+                               class="form-control input-sm" placeholder="Wpisz id klasy" ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" ng-pattern="/^\d{0,9}(\.\d{1,9})?$/"
+                        />
+                        <p class="input-error" ng-show="myForm.idKlasy.$error.pattern" class="help-block">Id klasy nie
+                            może być ujemne.</p>
                     </div>
                 </div>
 
                 <div class="row col-md-8">
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Pojemnosc silnika</label>
-                        <input type="text" ng-model="ctrl.car.silnik" class="form-control input-sm"
-                               placeholder="Wpisz poj silnika" required/>
+                        <input type="text" ng-model="ctrl.car.silnik" name="silnik"
+                               class="form-control input-sm" placeholder="Wpisz pojemność silnika" ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" ng-pattern="/([0-9]+\.*[0-9]*)$/"
+                        />
+                        <p class="input-error" ng-show="myForm.silnik.$error.pattern" class="help-block">Wpisz pojemnosc
+                            silnika w odpowiednim formacie (np. 2.0)</p>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Cena wypozyczenia</label>
-                        <input type="text" ng-model="ctrl.car.cenaWypozyczenia" class="form-control input-sm"
-                               placeholder="Wpisz cene wyp" required/>
+                        <input type="number" ng-model="ctrl.car.cenaWypozyczenia" name="cenaWypozyczenia"
+                               class="form-control input-sm" placeholder="Wpisz cenę wypożyczenia" ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" ng-pattern="/^\d{0,9}(\.\d{1,9})?$/"
+                        />
+                        <p class="input-error" ng-show="myForm.cenaWypozyczenia.$error.pattern" class="help-block">Wpisz
+                            prawidłową wartość ceny wypożyczenia.</p>
                     </div>
                 </div>
 
                 <div class="row col-md-8">
                     <div class="col-md-4 mb-3">
                         <label class="control-label">Aktualny przebieg</label>
-                        <input type="text" ng-model="ctrl.car.aktualnyPrzebieg" class="form-control input-sm"
-                               placeholder="Wpisz aktualny przebieg" required/>
+                        <input type="number" ng-model="ctrl.car.aktualnyPrzebieg" name="aktualnyPrzebieg"
+                               class="form-control input-sm" placeholder="Wpisz aktualny przebieg" ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" ng-pattern="/^\d{0,9}(\.\d{1,9})?$/"
+                        />
+                        <p class="input-error" ng-show="myForm.aktualnyPrzebieg.$error.pattern" class="help-block">Wpisz
+                            prawidłową wartość przebiegu samochodu.</p>
                     </div>
                 </div>
 

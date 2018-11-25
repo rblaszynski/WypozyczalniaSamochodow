@@ -4,6 +4,8 @@ angular.module('myApp').controller('CarController', ['$scope', 'CarService', fun
     var $ctrl = this;
     $ctrl.cars = [];
     $ctrl.car = {};
+    $ctrl.error = '';
+    $scope.currentYear = new Date().getFullYear();
 
     $ctrl.submit = submit;
     $ctrl.edit = edit;
@@ -31,6 +33,8 @@ angular.module('myApp').controller('CarController', ['$scope', 'CarService', fun
                 fetchAllCars,
                 function (errResponse) {
                     console.error('Error while creating Car');
+                    console.log(errResponse.data);
+                    $ctrl.error = errResponse.data;
                 }
             );
     }
@@ -42,6 +46,8 @@ angular.module('myApp').controller('CarController', ['$scope', 'CarService', fun
                 fetchAllCars,
                 function (errResponse) {
                     console.error('Error while updating Car');
+                    console.log(errResponse.toString());
+                    $ctrl.error = errResponse.data;
                 }
             );
     }
@@ -84,6 +90,7 @@ angular.module('myApp').controller('CarController', ['$scope', 'CarService', fun
 
     function reset() {
         $ctrl.car = {};
+        $ctrl.error = '';
         $scope.myForm.$setPristine();
     }
 

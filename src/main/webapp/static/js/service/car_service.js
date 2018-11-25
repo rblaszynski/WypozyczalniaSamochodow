@@ -52,7 +52,9 @@ angular.module('myApp').factory('CarService', ['$http', '$q', function($http, $q
             function (response) {
                 deferred.resolve(response.data);
             },
-            function(errResponse){
+            function(errResponse, response, data){
+                console.log(response);
+                console.log(data);
                 console.error('Error while updating Car');
                 deferred.reject(errResponse);
             }
