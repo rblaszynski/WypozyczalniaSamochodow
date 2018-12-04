@@ -30,7 +30,10 @@
                 <a class="nav-link" href="UserManagement">Użytkownicy</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="HireCar">Wypożyczenia</a>
+                <a class="nav-link disabled" href="HireCar">Wypożycz</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="HireRaport">Raport wypożyczeń</a>
             </li>
         </ul>
     </div>

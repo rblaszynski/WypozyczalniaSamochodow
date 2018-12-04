@@ -1,5 +1,6 @@
 package com.wypozyczalnia.dao;
 
+import com.wypozyczalnia.model.Klient;
 import com.wypozyczalnia.model.Samochod;
 import com.wypozyczalnia.model.User;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
@@ -253,6 +254,36 @@ public class JDBCDriver {
             return ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
         return "true";
+    }
+
+    public List<Klient> selectAllClients() {
+        String query = "SELECT     *\n" +
+                "FROM       Osoba\n" +
+                "             LEFT JOIN  Klienci K on Osoba.IdOsoby = K.IdOsoby where k.IdOsoby is not null\n";
+        List<Klient> klients = new ArrayList<Klient>();
+        try (
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            if (!rs.isBeforeFirst()) {
+                found = false;
+            } else {
+                found = true;
+                while (rs.next()) {
+                    Klient klient = new Klient();
+                    klient.setIdKlienta(Long.valueOf(rs.getString("IdKlienta")));
+                    klient.setImie(rs.getString("Imie"));
+                    klient.setNazwisko(rs.getString("Nazwisko"));
+                    klient.setDataUrodzenia(rs.getString("DataUrodzenia"));
+                    klients.add(klient);
+                }
+                return klients;
+            }
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+           // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
+        }
+        //return "true";
+        return null;
     }
 
     public Connection getConnection() {

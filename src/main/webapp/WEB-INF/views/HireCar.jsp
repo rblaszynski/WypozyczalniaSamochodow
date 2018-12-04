@@ -24,7 +24,10 @@
                 <a class="nav-link" href="UserManagement">Użytkownicy</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="HireCar">Wypożyczenia<span class="sr-only">(current)</span></a>
+                <a class="nav-link active" href="HireCar">Wypożycz<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="HireRaport">Raport wypożyczeń</a>
             </li>
         </ul>
     </div>
@@ -50,7 +53,7 @@
 
                 <label for="repeatSelect"> Wybierz klienta: </label>
                 <select class="form-control" name="repeatSelect" id="repeatSelect" ng-model="ctrl.hire.user">
-                    <option ng-repeat="option in ctrl.users" value="{{option.id}}">{{option.imie}} {{option.nazwisko}}</option>
+                    <option ng-repeat="option in ctrl.users" value="{{option.idKlienta}}">{{option.imie}} {{option.nazwisko}}</option>
                 </select>
 
                 <label for="repeatSelect"> Data wypozyczenia: </label>

@@ -28,9 +28,14 @@
                 <p><a class="btn btn-secondary" href="UserManagement" role="button">Szczegóły »</a></p>
             </div>
             <div class="col-md-4">
-                <h2>Wypożyczenia samochodów</h2>
+                <h2>Wypożycz samochodów</h2>
                 <p>Zarządzanie wypożyczeniami</p>
                 <p><a class="btn btn-secondary" href="HireCar" role="button">Szczegóły »</a></p>
+            </div>
+            <div class="col-md-4">
+                <h2>Raport wypożyczeń</h2>
+                <p>Szczegóły</p>
+                <p><a class="btn btn-secondary" href="HireRaport" role="button">Szczegóły »</a></p>
             </div>
         </div>
         <hr>

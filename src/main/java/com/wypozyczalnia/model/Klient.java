@@ -5,6 +5,8 @@ public class Klient extends User {
     private long idPrawoJazdy;
     private String nrDowodu;
 
+    public Klient(){}
+
     public Klient(long idKlienta, long idPrawoJazdy, String nrDowodu) {
         this.idKlienta = idKlienta;
         this.idPrawoJazdy = idPrawoJazdy;

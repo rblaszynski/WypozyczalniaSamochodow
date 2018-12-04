@@ -28,4 +28,9 @@ public class IndexController {
         return "HireCar";
     }
 
+    @RequestMapping(value = "/HireRaport", method = RequestMethod.GET)
+    public String getHireRaport() {
+        return "HireRaport";
+    }
+
 }

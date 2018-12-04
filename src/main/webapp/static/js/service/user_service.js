@@ -8,10 +8,27 @@ angular.module('myApp').factory('UserService', ['$http', '$q', function($http, $
         fetchAllUsers: fetchAllUsers,
         createUser: createUser,
         updateUser:updateUser,
-        deleteUser:deleteUser
+        deleteUser:deleteUser,
+        fetchAllClients: fetchAllClients
     };
 
     return factory;
+
+    function fetchAllClients() {
+        var deferred = $q.defer();
+        $http.get('http://localhost:8080/WypozyczalniaSamochodow/clients/')
+            .then(
+                function (response) {
+                    deferred.resolve(response.data);
+                },
+                function(errResponse){
+                    console.error('Error while fetching Users');
+                    deferred.reject(errResponse);
+                }
+            );
+        return deferred.promise;
+    }
+
 
     function fetchAllUsers() {
         var deferred = $q.defer();

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('HireController', ['$scope', 'CarService', 'UserService', 'HireService', function ($scope, CarService, UserService, HireService) {
+    .controller('ReportController', ['$scope', 'CarService', 'UserService', 'HireService', function ($scope, CarService, UserService, HireService) {
         var $ctrl = this;
         $ctrl.cars = [];
         $ctrl.car = {};

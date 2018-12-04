@@ -2,6 +2,7 @@ package com.wypozyczalnia.controller;
 
 import java.util.List;
 
+import com.wypozyczalnia.model.Klient;
 import com.wypozyczalnia.model.Samochod;
 import com.wypozyczalnia.model.User;
 import com.wypozyczalnia.service.UserService;
@@ -61,5 +62,15 @@ public class UserServiceRestEndpoint {
     public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(String.valueOf(id));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //------------------- Get Clients --------------------------------------------------------
+    @RequestMapping(value = "/clients/", method = RequestMethod.GET)
+    public ResponseEntity<List<Klient>> listAllClients() {
+        List<Klient> users = userService.findAllClients();
+        if(users.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }
