@@ -1,10 +1,6 @@
 package com.wypozyczalnia.dao;
 
-import com.wypozyczalnia.model.Klient;
-import com.wypozyczalnia.model.Samochod;
-import com.wypozyczalnia.model.User;
-import com.microsoft.sqlserver.jdbc.SQLServerDriver;
-import com.wypozyczalnia.model.Wypozyczenie;
+import com.wypozyczalnia.model.*;
 
 import static com.wypozyczalnia.controller.CarServiceRestEndpoint.cars;
 
@@ -283,6 +279,71 @@ public class JDBCDriver {
            // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
         }
         //return "true";
+        return null;
+    }
+
+    public List<RaportUzytkownika> getClientReport(String id){
+        String query = "SELECT    DataWypozyczenia, DataZwrotu, Koszt, s.Marka, s.Model\n" +
+                "FROM       Wypozyczenia\n" +
+                "             LEFT JOIN  Klienci K on Wypozyczenia.IdKlienta = K.IdKlienta\n" +
+                "             left join Samochody s on Wypozyczenia.IdSamochodu = s.IdSamochodu\n" +
+                "              where k.IdKlienta="+id;
+        List<RaportUzytkownika> raporty = new ArrayList<>();
+        try (
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            if (!rs.isBeforeFirst()) {
+                found = false;
+            } else {
+                found = true;
+                while (rs.next()) {
+                    RaportUzytkownika raportUzytkownika = new RaportUzytkownika();
+                    raportUzytkownika.setDataWypozyczenia(rs.getString("DataWypozyczenia"));
+                    raportUzytkownika.setDataZwrotu(rs.getString("DataZwrotu"));
+                    raportUzytkownika.setKoszt((Double.valueOf(rs.getString("Koszt"))));
+                    raportUzytkownika.setMarka(rs.getString("Marka"));
+                    raportUzytkownika.setModel(rs.getString("Model"));
+                    raporty.add(raportUzytkownika);
+                }
+                return raporty;
+            }
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+            // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
+        }
+        return null;
+    }
+
+public List<RaportSamochodu> getCarReport(String id){
+        String query = "SELECT    DataWypozyczenia, DataZwrotu, koszt, o.Imie, o.Nazwisko\n" +
+                "FROM       Wypozyczenia\n" +
+                "             LEFT JOIN  Klienci K on Wypozyczenia.IdKlienta = K.IdKlienta\n" +
+                "             left join Samochody s on Wypozyczenia.IdSamochodu = s.IdSamochodu\n" +
+                "              left join Osoba O on K.IdOsoby = O.IdOsoby\n" +
+                "              where s.IdSamochodu="+id;
+        List<RaportSamochodu> raporty = new ArrayList<>();
+        try (
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            if (!rs.isBeforeFirst()) {
+                found = false;
+            } else {
+                found = true;
+                while (rs.next()) {
+                    RaportSamochodu raportSamochodu = new RaportSamochodu();
+                    raportSamochodu.setDataWypozyczenia(rs.getString("DataWypozyczenia"));
+                    raportSamochodu.setDataZwrotu(rs.getString("DataZwrotu"));
+                    raportSamochodu.setKoszt((Double.valueOf(rs.getString("Koszt"))));
+                    raportSamochodu.setImie(rs.getString("Imie"));
+                    raportSamochodu.setNazwisko(rs.getString("Nazwisko"));
+                    raporty.add(raportSamochodu);
+                }
+                return raporty;
+            }
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+            // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
+        }
         return null;
     }
 

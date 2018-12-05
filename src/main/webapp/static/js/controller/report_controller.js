@@ -1,21 +1,21 @@
 'use strict';
 
 angular.module('myApp')
-    .controller('ReportController', ['$scope', 'CarService', 'UserService', 'HireService', function ($scope, CarService, UserService, HireService) {
+    .controller('ReportController', ['$scope', 'CarService', 'UserService', 'ReportService', function ($scope, CarService, UserService, ReportService) {
         var $ctrl = this;
         $ctrl.cars = [];
         $ctrl.car = {};
+        $ctrl.report = {};
 
         $ctrl.users = [];
         $ctrl.user = {};
         $ctrl.error = '';
         $ctrl.hire = {};
+        $ctrl.showSelector = true;
         $scope.currentYear = new Date().getFullYear();
 
         $ctrl.submit = submit;
-        // $ctrl.edit = edit;
-        // $ctrl.remove = remove;
-        // $ctrl.reset = reset;
+         $ctrl.reset = reset;
 
 
         fetchAllCars();
@@ -45,67 +45,29 @@ angular.module('myApp')
                 );
         }
 
-        //
-        //
-        function createCar(hire) {
-            HireService.hireCar(hire)
+        function generateReport(type, id) {
+            ReportService.generateReport(type,id)
                 .then(
-                    fetchAllCars,
+                    function(d){
+                         $ctrl.reports = d;
+                    },
                     function (errResponse) {
-                        console.error('Error while creating Car');
+                        console.error('Error while generating report');
                         console.log(errResponse.data);
                         $ctrl.error = errResponse.data;
                     }
                 );
         }
 
-        // function updateCar(Car, id) {
-        //     console.log('update');
-        //     CarService.updateCar(Car, id)
-        //         .then(
-        //             fetchAllCars,
-        //             function (errResponse) {
-        //                 console.error('Error while updating Car');
-        //                 console.log(errResponse.toString());
-        //                 $ctrl.error = errResponse.data;
-        //             }
-        //         );
-        // }
-        //
-        // function deleteCar(id) {
-        //     CarService.deleteCar(id)
-        //         .then(
-        //             fetchAllCars,
-        //             function (errResponse) {
-        //                 console.error('Error while deleting Car');
-        //             }
-        //         );
-        // }
-        //
         function submit() {
-            createCar($ctrl.hire);
-            reset();
+            $ctrl.showSelector = false;
+            generateReport($ctrl.report.name, $ctrl.report.id);
         }
 
-        //
-        // function edit(id) {
-        //     console.log('id to be edited', id);
-        //     for (var i = 0; i < $ctrl.cars.length; i++) {
-        //         if ($ctrl.cars[i].id === id) {
-        //             $ctrl.car = angular.copy($ctrl.cars[i]);
-        //             break;
-        //         }
-        //     }
-        // }
-        //
-        // function remove(id) {
-        //     console.log('id to be deleted', id);
-        //     deleteCar(id);
-        // }
-        //
-        //
         function reset() {
+            $ctrl.report = {};
             $ctrl.hire = {};
+            $ctrl.showSelector = true;
             $ctrl.error = '';
             $scope.myForm.$setPristine();
         }

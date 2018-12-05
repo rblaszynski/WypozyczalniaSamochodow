@@ -2,23 +2,23 @@
 
 angular.module('myApp').factory('ReportService', ['$http', '$q', function($http, $q){
 
-    var REST_SERVICE_URI = 'http://localhost:8080/WypozyczalniaSamochodow/hire/';
+    var REST_SERVICE_URI = 'http://localhost:8080/WypozyczalniaSamochodow/report';
 
     var factory = {
-        hireCar: hireCar
+        generateReport: generateReport
     };
 
     return factory;
 
-    function hireCar(car) {
+    function generateReport(type, id) {
         var deferred = $q.defer();
-        $http.post(REST_SERVICE_URI, car)
+        $http.get(REST_SERVICE_URI+'/'+type+'/'+id)
             .then(
                 function (response) {
                     deferred.resolve(response.data);
                 },
                 function(errResponse){
-                    console.error('Error while creating Car');
+                    console.error('Error while generating report');
                     deferred.reject(errResponse);
                 }
             );

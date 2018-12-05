@@ -45,9 +45,9 @@
         {{ctrl.error}}
     </span>
             </div>
-            <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal" novalidate>
+            <form ng-show="ctrl.showSelector" ng-submit="ctrl.submit()" name="myForm" class="form-horizontal" novalidate>
                 <label>
-                    <input type="radio" ng-model="ctrl.report.name" value="person">
+                    <input type="radio" ng-model="ctrl.report.name" value="client">
                     Raport klienta
                 </label><br/>
                 <label>
@@ -57,16 +57,16 @@
 
                 <div ng-if="ctrl.report.name==='car'">
                     <label for="repeatSelect"> Wybierz samochod: </label>
-                    <select class="form-control" name="repeatSelect" id="repeatSelect" ng-model="ctrl.hire.car">
+                    <select class="form-control" name="repeatSelect" id="repeatSelect" ng-model="ctrl.report.id">
                         <option ng-repeat="option in ctrl.cars" value="{{option.id}}">{{option.marka}}
                             {{option.model}}
                         </option>
                     </select>
                 </div>
 
-                <div ng-if="ctrl.report.name==='person'">
+                <div ng-if="ctrl.report.name==='client'">
                     <label for="repeatSelect"> Wybierz klienta: </label>
-                    <select class="form-control" name="repeatSelect" id="repeatSelect" ng-model="ctrl.hire.user">
+                    <select class="form-control" name="repeatSelect" id="repeatSelect" ng-model="ctrl.report.id">
                         <option ng-repeat="option in ctrl.users" value="{{option.idKlienta}}">{{option.imie}}
                             {{option.nazwisko}}
                         </option>
@@ -79,39 +79,41 @@
                         <button type="button" ng-click="ctrl.submit()" class="btn btn-primary btn-sm"
                                 ng-disabled="myForm.$invalid">Pokaż raport
                         </button>
-                        <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm"
-                                ng-disabled="myForm.$pristine">Reset Form
-                        </button>
                     </div>
                 </div>
             </form>
-            <div class="panel panel-default">
-                <div class="panel-heading" ng-if="ctrl.report.name==='person'"><span class="lead">Raport dla klienta id {{ctrl.hire.user}} {{ctrl.hire.user.nazwisko}}</span></div>
-                <div class="panel-heading" ng-if="ctrl.report.name==='car'"><span class="lead">Raport dla samochodu id {{ctrl.hire.car}} {{ctrl.hire.car.model}}</span></div>
+            <div ng-show="!ctrl.showSelector" class="panel panel-default">
+                <div class="panel-heading" ng-if="ctrl.report.name==='client'"><span class="lead">Raport dla klienta {{ctrl.users[ctrl.report.id-1].imie}} {{ctrl.users[ctrl.report.id-1].nazwisko}}</span></div>
+                <div class="panel-heading" ng-if="ctrl.report.name==='car'"><span class="lead">Raport dla samochodu {{ctrl.cars[ctrl.report.id-1].marka}} {{ctrl.cars[ctrl.report.id-1].model}}</span></div>
                 <div class="tablecontainer">
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th>IdWypozyczenia</th>
-                            <th>IdKlienta</th>
-                            <th>IdSamochodu</th>
                             <th>Data wypożyczenia</th>
                             <th>Data zwrotu</th>
                             <th>Koszt</th>
+                            <th ng-if="ctrl.report.name==='client'">Marka</th>
+                            <th ng-if="ctrl.report.name==='client'">Model</th>
+                            <th ng-if="ctrl.report.name==='car'">Imie</th>
+                            <th ng-if="ctrl.report.name==='car'">Nazwisko</th>
                             <th width="14%"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="hire in ctrl.hires">
-                            <td><span ng-bind="hire.idWypozyczenia"></span></td>
-                            <td><span ng-bind="hire.idKlienta"></span></td>
-                            <td><span ng-bind="hire.idSamochodu"></span></td>
-                            <td><span ng-bind="hire.dataWypozyczenia"></span></td>
-                            <td><span ng-bind="hire.dataZwrotu"></span></td>
-                            <td><span ng-bind="hire.koszt"></span></td>
+                        <tr ng-repeat="report in ctrl.reports">
+                            <td><span ng-bind="report.dataWypozyczenia"></span></td>
+                            <td><span ng-bind="report.dataZwrotu"></span></td>
+                            <td><span ng-bind="report.koszt"></span></td>
+                            <td ng-if="ctrl.report.name==='car'"><span ng-bind="report.imie"></span></td>
+                            <td ng-if="ctrl.report.name==='car'"><span ng-bind="report.nazwisko"></span></td>
+                            <td ng-if="ctrl.report.name==='client'"><span  ng-bind="report.marka"></span></td>
+                            <td ng-if="ctrl.report.name==='client'"><span  ng-bind="report.model"></span></td>
                         </tr>
                         </tbody>
                     </table>
+                    <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm"
+                            ng-disabled="myForm.$pristine">Wygeneruj jeszcze raz
+                    </button>
                 </div>
             </div>
 

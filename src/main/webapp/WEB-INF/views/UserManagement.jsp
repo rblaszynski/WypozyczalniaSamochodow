@@ -33,9 +33,7 @@
     </div>
 </nav>
 
-<%--TODO: UserManagement to jest 1:1 CarManagement, więc możesz sie na nim nauczyć jak to działa. Zmieniasz ng-controller na UserController i tworzysz w folderach webapp/static/js odpowiednie pliki user_service i user_controller--%>
-<%--TODO: wszedzie gdzie jest ctrl.car -> ctrl.user--%>
-<%--TODO: tak samo te labelki Marka, itp - wiadomo o co chodzi--%>
+
 <div class="generic-container" ng-controller="UserController as ctrl">
     <div class="panel panel-default">
         <div class="panel-heading"><span class="lead">User Form </span></div>
