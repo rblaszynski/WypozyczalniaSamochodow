@@ -1,5 +1,6 @@
 package com.wypozyczalnia.dao;
 
+import com.mongodb.*;
 import com.wypozyczalnia.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -7,6 +8,9 @@ import org.json.JSONObject;
 import static com.wypozyczalnia.controller.CarServiceRestEndpoint.cars;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.SQLException;
@@ -15,6 +19,16 @@ import java.sql.SQLException;
 public class JDBCDriver {
     private Connection connection = null;
     public static boolean found;
+    DBCollection collection = null;
+
+    private void insertErrorToMongo(SQLException s) {
+        DBObject object = new BasicDBObject();
+        object.put("date", new java.util.Date());
+        object.put("sqlState", s.getSQLState());
+        object.put("errorCode", s.getErrorCode());
+        object.put("description", s.toString());
+        collection.insert(object);
+    }
 
     public JDBCDriver() {
         try {
@@ -29,6 +43,10 @@ public class JDBCDriver {
             String url = "jdbc:sqlserver://localhost\\DESKTOP-KRGL5CF:1433;database=wypozyczalnia";
             String username = "Robert";
             String password = "password";
+
+            MongoClient mongoClient = new MongoClient();
+            DB database = mongoClient.getDB("wypozyczalnia");
+            collection = database.getCollection("wypozyczalniaErrors");
 
             System.out.println("Connecting database...");
 
@@ -68,6 +86,7 @@ public class JDBCDriver {
                 cars = carList;
             }
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
             return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
         }
@@ -89,6 +108,7 @@ public class JDBCDriver {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
             return ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
@@ -102,6 +122,7 @@ public class JDBCDriver {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
             return ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
@@ -125,6 +146,7 @@ public class JDBCDriver {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             return ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
         return "true";
@@ -154,6 +176,7 @@ public class JDBCDriver {
                 return users;
             }
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
         return null;
@@ -170,6 +193,7 @@ public class JDBCDriver {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
     }
@@ -181,6 +205,7 @@ public class JDBCDriver {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
     }
@@ -198,6 +223,7 @@ public class JDBCDriver {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
     }
@@ -227,6 +253,7 @@ public class JDBCDriver {
                 }
             }
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
         return null;
@@ -247,6 +274,7 @@ public class JDBCDriver {
             Statement statement = connection.createStatement();
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
             return ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
@@ -276,6 +304,7 @@ public class JDBCDriver {
                 return klients;
             }
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
             // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
         }
@@ -309,6 +338,7 @@ public class JDBCDriver {
                 return raporty;
             }
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
             // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
         }
@@ -342,6 +372,7 @@ public class JDBCDriver {
                 return raporty;
             }
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
             // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
         }
@@ -369,6 +400,7 @@ public class JDBCDriver {
                 }
             }
         } catch (SQLException s) {
+            insertErrorToMongo(s);
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
             return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
         }
