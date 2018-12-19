@@ -32,5 +32,9 @@ public class IndexController {
     public String getHireRaport() {
         return "HireRaport";
     }
+    @RequestMapping(value = "/Queries", method = RequestMethod.GET)
+    public String getQueries() {
+        return "Queries";
+    }
 
 }

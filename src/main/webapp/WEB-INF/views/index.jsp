@@ -37,6 +37,11 @@
                 <p>Szczegóły</p>
                 <p><a class="btn btn-secondary" href="HireRaport" role="button">Szczegóły »</a></p>
             </div>
+            <div class="col-md-4">
+                <h2>Zapytania</h2>
+                <p>Szczegóły</p>
+                <p><a class="btn btn-secondary" href="Queries" role="button">Szczegóły »</a></p>
+            </div>
         </div>
         <hr>
     </div>

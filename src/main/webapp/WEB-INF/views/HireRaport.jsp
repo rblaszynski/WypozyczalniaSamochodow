@@ -30,6 +30,9 @@
             <li class="nav-item">
                 <a class="nav-link active" href="HireRaport">Raport wypożyczeń<span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="Queries">Zapytania</a>
+            </li>
         </ul>
     </div>
 </nav>

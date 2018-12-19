@@ -29,6 +29,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="HireRaport">Raport wypożyczeń</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="Queries">Zapytania</a>
+            </li>
         </ul>
     </div>
 </nav>

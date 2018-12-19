@@ -1,6 +1,8 @@
 package com.wypozyczalnia.dao;
 
 import com.wypozyczalnia.model.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.wypozyczalnia.controller.CarServiceRestEndpoint.cars;
 
@@ -22,7 +24,6 @@ public class JDBCDriver {
                             + "database=wypozyczalnia;"
                             + "user=user;"
                             + "password=1234;";
-
 
 
             String url = "jdbc:sqlserver://localhost\\DESKTOP-KRGL5CF:1433;database=wypozyczalnia";
@@ -102,7 +103,7 @@ public class JDBCDriver {
             statement.executeUpdate(OQuery);
         } catch (SQLException s) {
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
-            return  ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+            return ("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
         }
         return "true";
     }
@@ -202,7 +203,7 @@ public class JDBCDriver {
     }
 
     public Samochod getCarById(String id) {
-        String query = "SELECT IdSamochodu, Marka, Model, Kolor, RokProdukcji, PojemnoscBaku, IdKlasy, Silnik, CenaWypozyczenia, AktualnyPrzebieg FROM samochody where IdSamochodu = "+id;
+        String query = "SELECT IdSamochodu, Marka, Model, Kolor, RokProdukcji, PojemnoscBaku, IdKlasy, Silnik, CenaWypozyczenia, AktualnyPrzebieg FROM samochody where IdSamochodu = " + id;
         try (
                 Statement stmt = connection.createStatement();
                 ResultSet rs = stmt.executeQuery(query)) {
@@ -231,7 +232,7 @@ public class JDBCDriver {
         return null;
     }
 
-    public String insertWypozyczenie(Wypozyczenie wypozyczenie){
+    public String insertWypozyczenie(Wypozyczenie wypozyczenie) {
         System.out.println(wypozyczenie);
         String OQuery = "insert into Wypozyczenia(IdKlienta, IdSamochodu, IdRodzaj, IdPracownika, DataWypozyczenia, DataZwrotu, Koszt, LimitKilometrow) " +
                 "values ('" + wypozyczenie.getIdKlienta() + "','" +
@@ -276,18 +277,18 @@ public class JDBCDriver {
             }
         } catch (SQLException s) {
             System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
-           // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
+            // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
         }
         //return "true";
         return null;
     }
 
-    public List<RaportUzytkownika> getClientReport(String id){
+    public List<RaportUzytkownika> getClientReport(String id) {
         String query = "SELECT    DataWypozyczenia, DataZwrotu, Koszt, s.Marka, s.Model\n" +
                 "FROM       Wypozyczenia\n" +
                 "             LEFT JOIN  Klienci K on Wypozyczenia.IdKlienta = K.IdKlienta\n" +
                 "             left join Samochody s on Wypozyczenia.IdSamochodu = s.IdSamochodu\n" +
-                "              where k.IdKlienta="+id;
+                "              where k.IdKlienta=" + id;
         List<RaportUzytkownika> raporty = new ArrayList<>();
         try (
                 Statement stmt = connection.createStatement();
@@ -314,13 +315,13 @@ public class JDBCDriver {
         return null;
     }
 
-public List<RaportSamochodu> getCarReport(String id){
+    public List<RaportSamochodu> getCarReport(String id) {
         String query = "SELECT    DataWypozyczenia, DataZwrotu, koszt, o.Imie, o.Nazwisko\n" +
                 "FROM       Wypozyczenia\n" +
                 "             LEFT JOIN  Klienci K on Wypozyczenia.IdKlienta = K.IdKlienta\n" +
                 "             left join Samochody s on Wypozyczenia.IdSamochodu = s.IdSamochodu\n" +
                 "              left join Osoba O on K.IdOsoby = O.IdOsoby\n" +
-                "              where s.IdSamochodu="+id;
+                "              where s.IdSamochodu=" + id;
         List<RaportSamochodu> raporty = new ArrayList<>();
         try (
                 Statement stmt = connection.createStatement();
@@ -345,6 +346,33 @@ public List<RaportSamochodu> getCarReport(String id){
             // return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
         }
         return null;
+    }
+
+    public String generateRaport(String query) {
+        JSONArray json = new JSONArray();
+        try (
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+            if (!rs.isBeforeFirst()) {
+                found = false;
+            } else {
+                found = true;
+                ResultSetMetaData rsmd = rs.getMetaData();
+                while (rs.next()) {
+                    int numColumns = rsmd.getColumnCount();
+                    JSONObject obj = new JSONObject();
+                    for (int i = 1; i <= numColumns; i++) {
+                        String column_name = rsmd.getColumnName(i);
+                        obj.put(column_name, rs.getObject(column_name));
+                    }
+                    json.put(obj);
+                }
+            }
+        } catch (SQLException s) {
+            System.err.println("SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState());
+            return "SQL Error: " + s.toString() + " " + s.getErrorCode() + " " + s.getSQLState();
+        }
+        return json.toString();
     }
 
     public Connection getConnection() {
